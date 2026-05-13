@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>風味介紹</title>
+  <style>
+    :root {
+      --coffee-dark: #3f2414;
+      --coffee: #6f4e37;
+      --coffee-soft: #efe2d0;
+      --cream: #fff8ef;
+      --gold: #c8913b;
+      --text: #2f241c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(200,145,59,0.28), transparent 32%),
+        linear-gradient(135deg, #fff8ef, #ead6bf);
+      color: var(--text);
+      padding: 18px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin: 10px 0 18px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--coffee-dark);
+      font-size: 34px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #72543d;
+      font-size: 15px;
+    }
+
+    .selector-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(111,78,55,0.18);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 18px 45px rgba(70,43,25,0.16);
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--coffee-dark);
+    }
+
+    select {
+      width: 100%;
+      font-size: 20px;
+      font-weight: 800;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid #d7b98f;
+      background: #fffdf8;
+      color: var(--coffee-dark);
+      outline: none;
+    }
+
+    .quick-list {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 14px 2px 2px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      border: 1px solid #d5b58a;
+      background: #fffaf2;
+      color: #604126;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      scroll-snap-align: start;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--coffee);
+      color: white;
+      border-color: var(--coffee);
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: 32px;
+      padding: 24px;
+      box-shadow: 0 20px 55px rgba(70,43,25,0.2);
+      border: 1px solid rgba(111,78,55,0.16);
+    }
+
+    .bean-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .bean-name {
+      font-size: 32px;
+      font-weight: 950;
+      color: var(--coffee-dark);
+      line-height: 1.1;
+    }
+
+    .number {
+      background: var(--coffee-dark);
+      color: white;
+      min-width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      background: var(--cream);
+      border: 1px solid #ead2af;
+      border-radius: 22px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .field-label {
+      color: #8a6845;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .field-value {
+      color: var(--coffee-dark);
+      font-size: 20px;
+      font-weight: 950;
+      line-height: 1.25;
+    }
+
+    .origin {
+      background: #f5eadb;
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid #dfc29b;
+    }
+
+    .origin .field-label {
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    .origin-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--coffee-dark);
+      line-height: 1.4;
+    }
+
+    .flavor {
+      background: linear-gradient(135deg, #4b2e1c, #7b5236);
+      color: white;
+      border-radius: 26px;
+      padding: 20px;
+      line-height: 1.65;
+      font-size: 21px;
+      font-weight: 750;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16);
+    }
+
+    .flavor-label {
+      color: #ffe2ad;
+      font-size: 15px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .nav button {
+      border: none;
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 17px;
+      font-weight: 900;
+      color: white;
+      background: var(--coffee);
+      cursor: pointer;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #7a6049;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      h1 { font-size: 30px; }
+      .grid { grid-template-columns: 1fr; }
+      .bean-name { font-size: 30px; }
+      .flavor { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <h1>☕ 風味介紹</h1>
+      <div class="subtitle">選擇品名，快速查看烘焙度、處理法、產地與風味</div>
+    </section>
+
+    <section class="selector-card">
+      <label for="beanSelect">選擇品名</label>
+      <select id="beanSelect"></select>
+      <div class="quick-list" id="quickList"></div>
+    </section>
+
+    <section class="info-card">
+      <div class="bean-title">
+        <div class="bean-name" id="beanName"></div>
+        <div class="number" id="beanNumber"></div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <div class="field-label">烘焙度</div>
+          <div class="field-value" id="roast"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">處理法</div>
+          <div class="field-value" id="process"></div>
+        </div>      </div>
+
+      <div class="origin">
+        <div class="field-label">產地標示</div>
+        <div class="origin-value" id="origin"></div>
+      </div>
+
+      <div class="flavor">
+        <div class="flavor-label">風味簡介</div>
+        <div id="flavor"></div>
+      </div>
+
+      <div class="nav">
+        <button id="prevBtn">← 上一款</button>
+        <button id="nextBtn">下一款 →</button>
+      </div>
+    </section>
+
+    <div class="footer">咖啡豆小助手・GitHub Pages 版</div>
+  </main>
+
+  <script>
+    const beans = [
+      {
+        no: 1,
+        name: "黃金曼特寧",
+        roast: "深",
+        process: "半水洗",
+        origin: "印尼",
+        flavor: "濃郁深沉草本香、蜂蜜與黑巧克力苦甜滋味。"
+      },
+      {
+        no: 2,
+        name: "曼巴",
+        roast: "深",
+        process: "半水洗",
+        origin: "印尼、巴西",
+        flavor: "均衡柔和、帶烤花生及榛果香氣與煙燻甘甜。"
+      },
+      {
+        no: 3,
+        name: "義式",
+        roast: "中深",
+        process: "水洗",
+        origin: "中南美洲、非洲",
+        flavor: "口感均衡帶有堅果焦糖香甜、巧克力餘韻。"
+      },
+      {
+        no: 4,
+        name: "黃金曼巴",
+        roast: "中",
+        process: "半水洗",
+        origin: "印尼、巴西",
+        flavor: "核果調性的烤花生與桂圓香氣，熟成蜜柑與紅棗酸香。"
+      },
+      {
+        no: 5,
+        name: "巧克力王子",
+        roast: "中",
+        process: "水洗",
+        origin: "瓜地馬拉",
+        flavor: "溫潤厚實、沉穩的黑巧克力的甘甜回韻。"
+      },
+      {
+        no: 6,
+        name: "堅果爵士",
+        roast: "中",
+        process: "水洗",
+        origin: "哥倫比亞、薩爾瓦多、衣索比亞",
+        flavor: "醇厚平衡、黑可可、帶核水果與堅果餘韻。"
+      },
+      {
+        no: 7,
+        name: "冠軍配方",
+        roast: "中",
+        process: "水洗",
+        origin: "哥倫比亞、衣索比亞",
+        flavor: "百香果、鳳梨、莓果調性的熟帶水果風味，尾韻上有黑糖、巧克力、榛果、杏仁等堅果調風味。"
+      },
+      {
+        no: 8,
+        name: "百蜜花園",
+        roast: "中淺",
+        process: "蜜處理",
+        origin: "哥斯大黎加、衣索比亞",
+        flavor: "香氣均衡細緻、帶有甜李、果蜜甘醇。"
+      },
+      {
+        no: 9,
+        name: "莓果女伶",
+        roast: "淺",
+        process: "水果發酵日曬",
+        origin: "衣索比亞、哥倫比亞",
+        flavor: "清新果汁感風味，綜合莓果、水蜜桃、百香果和鳳梨的明亮果香，乳酸飲料的酸甜氣息。"
+      },
+      {
+        no: 10,
+        name: "耶加雪菲",
+        roast: "淺",
+        process: "水洗",
+        origin: "衣索比亞",
+        flavor: "清新茶感、帶有檸檬、香橙柑橘甜感。"
+      },
+      {
+        no: 11,
+        name: "果樹女神",
+        roast: "淺",
+        process: "日曬",
+        origin: "衣索比亞、哥倫比亞",
+        flavor: "清新果香、有藍莓與熱帶水果般的獨特風味。"
+      },
+      {
+        no: 12,
+        name: "花香耶加雪菲",
+        roast: "淺",
+        process: "日曬",
+        origin: "衣索比亞",
+        flavor: "風味細緻獨特雞蛋花香、香檳葡萄氣息。"
+      }
+    ];
+
+    let currentIndex = 0;
+
+    const beanSelect = document.getElementById("beanSelect");
+    const quickList = document.getElementById("quickList");
+
+    beans.forEach((bean, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = bean.name;
+      beanSelect.appendChild(option);
+
+      const chip = document.createElement("button");
+      chip.className = "chip";
+      chip.textContent = bean.name;
+      chip.addEventListener("click", () => {
+        currentIndex = index;
+        update();
+      });
+      quickList.appendChild(chip);
+    });
+
+    beanSelect.addEventListener("change", (e) => {
+      currentIndex = Number(e.target.value);
+      update();
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + beans.length) % beans.length;
+      update();
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % beans.length;
+      update();
+    });
+
+    function update() {
+      const bean = beans[currentIndex];
+
+      document.getElementById("beanName").textContent = bean.name;
+      document.getElementById("beanNumber").textContent = bean.no;      document.getElementById("roast").textContent = bean.roast;
+      document.getElementById("process").textContent = bean.process;
+      document.getElementById("origin").textContent = bean.origin;
+      document.getElementById("flavor").textContent = bean.flavor;
+
+      beanSelect.value = currentIndex;
+
+      [...quickList.children].forEach((chip, index) => {
+        chip.className = "chip" + (index === currentIndex ? " active" : "");
+      });
+    }
+
+    update();
+  </script>
+</body>
+</html>
